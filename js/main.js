@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const swiper = new Swiper('.swiper-container', {
         slidesPerView: 1,
         spaceBetween: 30,
-        loop: true,
+        loop: false, // Changed from true to false to prevent repetition
         autoplay: {
             delay: 3000,
             disableOnInteraction: false,
