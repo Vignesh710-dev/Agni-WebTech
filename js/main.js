@@ -219,3 +219,122 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.glass-loader').style.display = 'none';
   }, 3000); // Adjust time as needed
 });
+// Show loader on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const loader = document.querySelector('.holographic-loader');
+    
+    // Show loader immediately
+    loader.style.display = 'flex';
+    
+    // Hide after 1 second
+    setTimeout(() => {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'flex';
+        }, 300);
+    }, 1000);
+});
+
+const connectionLoader = document.querySelector('.connection-loader');
+
+// Show loader with connecting state
+connectionLoader.style.display = 'flex';
+
+// Simulate connection (replace with actual connection logic)
+setTimeout(() => {
+    // On successful connection
+    connectionLoader.classList.add('connected');
+    document.querySelector('.connection-status').textContent = 'Connected';
+    
+    // Hide after 1 second
+    setTimeout(() => {
+        connectionLoader.style.opacity = '0';
+        setTimeout(() => {
+            connectionLoader.style.display = 'none';
+            connectionLoader.style.opacity = '1';
+            connectionLoader.classList.remove('connected');
+        }, 300);
+    }, 1000);
+    
+    // For error state example:
+    // connectionLoader.classList.add('error');
+    // document.querySelector('.connection-status').textContent = 'Connection Failed';
+}, 1500);
+
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const formData = new FormData(form);
+  
+  // Verify form data is being collected
+  console.log('Form data:', Object.fromEntries(formData.entries()));
+  
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      const name = document.getElementById('name').value;
+      console.log('Formspree response:', data);
+      
+      Swal.fire({
+        title: `Thank you, ${name}!`,
+        text: 'Your message has been sent successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: 'var(--primary)'
+      });
+      
+      form.reset();
+    } else {
+      throw new Error('Form submission failed');
+    }
+  } catch (error) {
+    console.error('Submission error:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: 'There was a problem sending your message. Please try again.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: 'var(--primary)'
+    });
+  }
+});
+// Pause animation on hover
+const movingContainer = document.querySelector('.moving-container');
+if (movingContainer) {
+  movingContainer.addEventListener('mouseenter', () => {
+    movingContainer.style.animationPlayState = 'paused';
+  });
+  
+  movingContainer.addEventListener('mouseleave', () => {
+    movingContainer.style.animationPlayState = 'running';
+  });
+}
+// Add secret Konami code functionality
+const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+let konamiIndex = 0;
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+            // Trigger fun effect
+            document.body.style.transform = 'rotate(180deg)';
+            document.body.style.transition = 'transform 2s';
+            setTimeout(() => {
+                document.body.style.transform = '';
+            }, 2000);
+            konamiIndex = 0;
+        }
+    } else {
+        konamiIndex = 0;
+    }
+});
